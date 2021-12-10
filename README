@@ -1,0 +1,29 @@
+# Mirroring guide
+
+Prerequisites:
+* Linux server
+* Installed git and go (on Ubuntu the package is called `golang-go`)
+
+Steps:
+1. Log into the server using ssh
+2. Do these commands:
+
+  mkdir -p bin
+  git clone https://github.com/aajonusonline/aajonus.online
+  cd aajonus.online
+  go mod tidy
+  go build -o ~/bin/srv ./server
+  sudo sh -c '~/bin/srv -p 8080 >> ~/server.log 2>&1 &'
+
+3. Sometimes check for updates by doing this:
+
+  cd aajonus.online
+  git pull
+
+4. If there was an update, server needs to be restarted with:
+
+  sudo pkill srv
+  cd aajonus.online
+  go mod tidy
+  go build -o ~/bin/srv ./server
+  sudo sh -c '~/bin/srv -p 8080 >> ~/server.log 2>&1 &'
