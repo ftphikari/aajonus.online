@@ -8,8 +8,8 @@ Steps:
 1. Log into the server using ssh
 2. Do these commands:
 
-  mkdir -p bin
-  git clone https://github.com/aajonusonline/aajonus.online
+  mkdir -p ~/bin
+  git clone https://github.com/ftphikari/aajonus.online
   cd aajonus.online
   go mod tidy
   go build -o ~/bin/srv ./server
