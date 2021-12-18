@@ -2,10 +2,10 @@ package main
 
 import (
 	"flag"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
+	"io/fs"
+	"embed"
 	"path/filepath"
 	"regexp"
 	"strconv"
@@ -18,12 +18,16 @@ import (
 	"github.com/nanmu42/gzip"
 )
 
+//go:embed site
+var site embed.FS
+
 const (
 	datefmt   = "2006-01-02"
 	epochdate = "1970-01-01"
 )
 
 var (
+	port  int
 	// directory name, displayed name
 	searchIndex = map[string]string{
 		"articles": "Articles",
@@ -34,12 +38,7 @@ var (
 	lock     = sync.RWMutex{}
 	index    bleve.Index
 	wg       sync.WaitGroup
-)
-
-var (
-	port  int
-	wdir  string
-	ifile string
+	fsys     fs.FS
 )
 
 func textClean(text string) string {
@@ -69,7 +68,7 @@ func textClean(text string) string {
 
 func loadDirectory(dir string) {
 	defer wg.Done()
-	p, err := ioutil.ReadDir(dir)
+	p, err := fs.ReadDir(fsys, dir)
 	for err != nil {
 		log.Println("ReadDir:", err)
 		return
@@ -87,7 +86,7 @@ func loadDirectory(dir string) {
 			continue
 		}
 
-		b, err := ioutil.ReadFile(fpath)
+		b, err := fs.ReadFile(fsys, fpath)
 		if err != nil {
 			log.Printf("ReadFile(%s): %s\n", name, err)
 			continue
@@ -124,13 +123,9 @@ func loadCache() (time.Duration, error) {
 		}
 	}
 
-	// remove index if exists
-	err := os.RemoveAll(ifile)
-	if err != nil {
-		return 0, err
-	}
-
-	index, err = bleve.New(ifile, bleve.NewIndexMapping())
+	// NOTE: MemOnly is actually SMALLER in RAM than regular index. Go figure!
+	var err error
+	index, err = bleve.NewMemOnly(bleve.NewIndexMapping())
 	if err != nil {
 		return 0, err
 	}
@@ -155,13 +150,12 @@ func reloadCache() {
 
 func main() {
 	flag.IntVar(&port, "p", 8080, "port")
-	flag.StringVar(&wdir, "d", "site", "site directory")
-	flag.StringVar(&ifile, "i", "/tmp/aajonus.index", "index file")
 	flag.Parse()
 
-	err := os.Chdir(wdir)
+	var err error
+	fsys, err = fs.Sub(site, "site")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Unable to load embed site:", err)
 	}
 
 	http.Handle("/", gzip.DefaultHandler().WrapHandler(http.HandlerFunc(serve)))

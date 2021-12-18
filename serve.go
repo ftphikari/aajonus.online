@@ -1,10 +1,9 @@
 package main
 
 import (
-	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
+	"io/fs"
 	"path"
 	"path/filepath"
 	"sort"
@@ -27,7 +26,7 @@ const PAGE404 = "<h1>PAGE NOT FOUND.</h1>"
 func serveBase(w http.ResponseWriter, r *http.Request, page string, ogp OGP, query string) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	data, err := ioutil.ReadFile("base.htm")
+	data, err := fs.ReadFile(fsys, "base.htm")
 	if err != nil {
 		log.Println("serveBase:", err)
 		return
@@ -78,7 +77,7 @@ func serve404(w http.ResponseWriter, r *http.Request) {
 }
 
 func getTitleDate(f string) (string, time.Time) {
-	r, err := os.Open(f)
+	r, err := fsys.Open(f)
 	if err != nil {
 		log.Println("getTitleDate:", err)
 		return "", epoch
@@ -113,7 +112,7 @@ func serveDir(w http.ResponseWriter, r *http.Request, p string) {
 	var page string
 	var ogp OGP
 
-	files, err := ioutil.ReadDir(p)
+	files, err := fs.ReadDir(fsys, p)
 	if err != nil {
 		serve404(w, r)
 		log.Println("serveDir:", err)
@@ -160,7 +159,7 @@ func serveDir(w http.ResponseWriter, r *http.Request, p string) {
 }
 
 func servePage(w http.ResponseWriter, r *http.Request, f string) {
-	data, err := ioutil.ReadFile(f)
+	data, err := fs.ReadFile(fsys, f)
 	if err != nil {
 		serve404(w, r)
 		log.Println("servePage:", err)
@@ -214,7 +213,7 @@ func serveSitemap(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("https://aajonus.online\n"))
 	for _, dir := range keys {
 		w.Write([]byte("https://aajonus.online/" + dir + "\n"))
-		d, err := ioutil.ReadDir(dir)
+		d, err := fs.ReadDir(fsys, dir)
 		for err != nil {
 			log.Println("ReadDir:", err)
 			return
@@ -245,7 +244,7 @@ func serve(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if f, err := os.Stat(p); err == nil {
+	if f, err := fs.Stat(fsys, p); err == nil {
 		if f.IsDir() {
 			serveDir(w, r, p)
 			return
@@ -256,11 +255,12 @@ func serve(w http.ResponseWriter, r *http.Request) {
 		} else {
 			w.Header().Set("Cache-Control", "public, max-age=604800")
 		}
-		http.ServeFile(w, r, p)
+
+		http.FileServer(http.FS(fsys)).ServeHTTP(w, r)
 		return
 	}
 
-	if _, err := os.Stat(p + ".tei"); err != nil {
+	if _, err := fs.Stat(fsys, p + ".tei"); err != nil {
 		serve404(w, r)
 		log.Println("serve:", p, "not found.", readUserIP(r))
 		return

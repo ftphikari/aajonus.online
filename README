@@ -1,29 +1,25 @@
-# Mirroring guide
-
-Prerequisites:
+# Prerequisites for serving:
 * Linux server
-* Installed git and go (on Ubuntu the package is called `golang-go`)
+* Compiled binary
 
-Steps:
-1. Log into the server using ssh
-2. Do these commands:
+## Serving
+1. Copy the aajonus.online executable to the server
+2. Run it (-p stands for port):
 
-  mkdir -p ~/bin
-  git clone https://github.com/ftphikari/aajonus.online
-  cd aajonus.online
-  go mod tidy
-  go build -o ~/bin/srv ./server
-  sudo sh -c '~/bin/srv -p 8080 >> ~/server.log 2>&1 &'
+  ~/bin/aajonus.online -p 8080 >> ~/aajonus.log 2>&1 &
 
-3. Sometimes check for updates by doing this:
+3. If there was an update, server can to be restarted with:
 
-  cd aajonus.online
-  git pull
+  pkill aajonus.online
+  ~/bin/aajonus.online -p 8080 >> ~/aajonus.log 2>&1 &
 
-4. If there was an update, server needs to be restarted with:
 
-  sudo pkill srv
-  cd aajonus.online
-  go mod tidy
-  go build -o ~/bin/srv ./server
-  sudo sh -c '~/bin/srv -p 8080 >> ~/server.log 2>&1 &'
+# Prerequisites for compilation:
+* Installed Go (for example on Ubuntu the package is called `golang-go`)
+* Any OS that runs Go (Go can build binaries to any OS from any OS)
+
+## Compilation (for Unix-like)
+
+  $ sh build.sh
+
+This will create a file aajonus.online is the directory

@@ -5,7 +5,6 @@ import (
 	"html"
 	"log"
 	"net/http"
-	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -45,7 +44,7 @@ func search(q string) string {
 
 	//	page = fmt.Sprintf("<h1>%d matches, showing %d through %d, took %s</h1>\n", sr.Total, sr.Request.From+1, sr.Request.From+len(sr.Hits), sr.Took)
 	for _, hit := range sr.Hits {
-		r, err := os.Open(hit.ID)
+		r, err := fsys.Open(hit.ID)
 		if err != nil {
 			log.Println(err)
 			continue
