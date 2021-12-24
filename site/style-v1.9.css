@@ -54,9 +54,11 @@ blockquote p, wallet p { margin: 0px; }
 blockquote img, wallet img { margin-right: 10px; float: left; }
 blockquote cite, wallet cite { float: right; }
 
-wallet { display: flex; gap: 7px; max-width: 700px; }
+wallet { display: inline-flex; gap: 7px; max-width: 700px; }
 wallet::before { font-family: 'Font Awesome 5 Brands'; font-weight: 400; margin: auto; }
 wallet[monero]::before { content: "\f3d0"; }
+wallet[ethereum]::before { content: "\f42e"; }
+wallet[bitcoin]::before { content: "\f379"; }
 
 details { display: inline-flex; border: 1px solid var(--fg); }
 details summary { cursor: pointer; padding: 2px 4px; }
