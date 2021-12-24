@@ -160,6 +160,6 @@ func main() {
 
 	http.Handle("/", gzip.DefaultHandler().WrapHandler(http.HandlerFunc(serve)))
 	log.Println("Server started")
-	reloadCache()
+	go reloadCache()
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(port), nil))
 }

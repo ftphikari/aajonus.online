@@ -10,7 +10,8 @@
 
 3. If there was an update, server can to be restarted with:
 
-  pkill aajonus.online
+  pid=$(pgrep aajonus.online)
+  kill "$pid" && tail --pid="$pid" -f /dev/null
   ~/bin/aajonus.online -p 8080 >> ~/aajonus.log 2>&1 &
 
 
