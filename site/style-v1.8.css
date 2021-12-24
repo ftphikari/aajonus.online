@@ -48,11 +48,15 @@ table { border: 2px solid var(--fg); margin: 10px; }
 th, td { border-left: 1px solid var(--fg); border-right: 1px solid var(--fg); }
 th { border-bottom: 2px solid var(--fg); }
 
-blockquote { background: var(--quote-bg); margin: 7px; padding: 7px; padding-left: 10px; border: none; border-color: var(--quote-border); border-left: 7px solid var(--quote-border); box-shadow: 0px 0px 42px -20px rgb(0 0 0 / 50%); word-break: break-word; }
-blockquote::before { content: ""; pointer-events: none; position: absolute; z-index: 1; left: 0; top: 0; right: 0; bottom: 0; }
-blockquote p { margin: 0px; }
-blockquote img { margin-right: 10px; float: left; }
-blockquote cite { float: right; }
+blockquote, wallet { display: block; background: var(--quote-bg); margin: 7px; padding: 7px; padding-left: 10px; border: none; border-color: var(--quote-border); border-left: 7px solid var(--quote-border); box-shadow: 0px 0px 42px -20px rgb(0 0 0 / 50%); word-break: break-word; }
+blockquote::before, wallet::before { content: ""; pointer-events: none; }
+blockquote p, wallet p { margin: 0px; }
+blockquote img, wallet img { margin-right: 10px; float: left; }
+blockquote cite, wallet cite { float: right; }
+
+wallet { display: flex; gap: 7px; max-width: 700px; }
+wallet::before { font-family: 'Font Awesome 5 Brands'; font-weight: 400; margin: auto; }
+wallet[monero]::before { content: "\f3d0"; }
 
 details { display: inline-flex; border: 1px solid var(--fg); }
 details summary { cursor: pointer; padding: 2px 4px; }
