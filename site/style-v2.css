@@ -5,7 +5,7 @@
  --fg: #000;
  --fg-dim: grey;
  --quote-border: #c6c6c6;
- --quote-bg: var(--bg);
+ --quote-bg: #ececec;
 }
 
 @media(prefers-color-scheme: dark) {
@@ -48,7 +48,7 @@ table { border: 2px solid var(--fg); margin: 10px; }
 th, td { border-left: 1px solid var(--fg); border-right: 1px solid var(--fg); }
 th { border-bottom: 2px solid var(--fg); }
 
-blockquote, wallet { display: block; background: var(--quote-bg); margin: 7px; padding: 7px; padding-left: 10px; border: none; border-color: var(--quote-border); border-left: 7px solid var(--quote-border); box-shadow: 0px 0px 42px -20px rgb(0 0 0 / 50%); word-break: break-word; }
+blockquote, wallet { display: block; background: var(--quote-bg); margin: 7px; padding: 7px; padding-left: 10px; border: none; border-color: var(--quote-border); border-left: 7px solid var(--quote-border); word-break: break-word; }
 blockquote::before, wallet::before { content: ""; pointer-events: none; }
 blockquote p, wallet p { margin: 0px; }
 blockquote img, wallet img { margin-right: 10px; float: left; }
