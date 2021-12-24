@@ -29,7 +29,7 @@ img { display: inline-block; }
 div { display: flex; }
 
 nav { font-size: var(--font-size-big); border-bottom: 3px solid var(--fg); margin: 0px auto; padding: 7px; display: flex; flex-flow: row-reverse; }
-nav form { display: inherit; }
+nav form { display: inherit; gap: 7px; }
 nav label, nav #check  { display: none; -webkit-tap-highlight-color: transparent; }
 nav label:focus { outline: none; }
 nav ul { padding: 0px; margin: 0px; margin-right: auto; }
