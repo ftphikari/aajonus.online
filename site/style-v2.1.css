@@ -22,7 +22,7 @@
 body { background: var(--bg); color: var(--fg); overflow-y: scroll; font: var(--font-size) Helvetica; margin: 0px; }
 main { padding: 7px; max-width: 1024px; margin-left: auto; margin-right: auto; }
 
-a { color: var(--fg); overflow-wrap: anywhere; font-weight: bold; text-decoration: underline; text-decoration-color: var(--fg); text-decoration-thickness: 2px; text-underline-offset: 2px; }
+a { color: var(--fg); overflow-wrap: anywhere; font-weight: bold; text-decoration: underline; text-decoration-color: var(--fg); text-decoration-thickness: 2px; }
 a:hover { color: var(--fg-dim); text-decoration-color: var(--fg-dim); }
 
 img { display: inline-block; }
