@@ -16,7 +16,7 @@
  }
 }
 
-* { transition: all 25ms ease-out; }
+* { transition: all 50ms ease-out; }
 *:focus-visible { outline: 2px solid var(--fg); }
 
 body { background: var(--bg); color: var(--fg); overflow-y: scroll; font: var(--font-size) Helvetica; margin: 0px; }
