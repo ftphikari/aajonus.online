@@ -36,7 +36,7 @@ nav ul { padding: 0px; margin: 0px; margin-right: auto; }
 nav ul li { display: inline-block; margin: 7px; }
 nav ul li[sep]::before { content: "|"; }
 nav ul li a { text-decoration-color: transparent; }
-nav ul li a:hover { text-decoration-color: var(--fg); color: var(--fg); }
+nav ul li a:hover { text-decoration-color: transparent; color: var(--fg-dim); }
 
 form { align-self: center; }
 input, label, button, textarea { padding: 5px 7px; background: var(--bg); color: var(--fg); border: 2px solid var(--fg); text-align: left; font: var(--font-size) Helvetica; margin: 0 auto; }
