@@ -1,11 +1,10 @@
 package main
 
 import (
+	"io/fs"
 	"log"
 	"net/http"
-	"io/fs"
 	"path"
-	"path/filepath"
 	"sort"
 	"strings"
 	"text/template"
@@ -126,7 +125,7 @@ func serveDir(w http.ResponseWriter, r *http.Request, p string) {
 
 		page += "# " + p + "\n\n"
 		for i := range files {
-			link := filepath.Join("/", p, files[i].Name())
+			link := path.Join("/", p, files[i].Name())
 			page += "* @(" + link + ")\n"
 		}
 		page = teisai.RenderText(page)
@@ -141,10 +140,10 @@ func serveDir(w http.ResponseWriter, r *http.Request, p string) {
 
 	t1 := time.Now().Add(time.Hour * -168) // 3 days
 	for i := range files {
-		link := filepath.Join("/", p, files[i].Name())
+		link := path.Join("/", p, files[i].Name())
 		link = strings.TrimSuffix(link, ".tei")
 
-		title, date := getTitleDate(filepath.Join(p, files[i].Name()))
+		title, date := getTitleDate(path.Join(p, files[i].Name()))
 		page += `* @[` + title + "](" + link + ")"
 
 		if t1.Before(date) {
@@ -167,9 +166,9 @@ func servePage(w http.ResponseWriter, r *http.Request, f string) {
 	}
 
 	var ogp OGP
-	ogp.Title = strings.TrimSuffix(filepath.Base(f), ".tei")
+	ogp.Title = strings.TrimSuffix(path.Base(f), ".tei")
 
-	dir, _ := filepath.Split(f)
+	dir, _ := path.Split(f)
 	dir = path.Clean(dir)
 	if section, ok := searchIndex[dir]; ok {
 		ogp.Section = section
@@ -220,7 +219,7 @@ func serveSitemap(w http.ResponseWriter, r *http.Request) {
 		}
 		for _, f := range d {
 			name := f.Name()
-			fpath := filepath.Join(dir, name)
+			fpath := path.Join(dir, name)
 			fpath = strings.TrimSuffix(fpath, ".tei")
 			w.Write([]byte("https://aajonus.online/" + fpath + "\n"))
 		}
@@ -260,7 +259,7 @@ func serve(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if _, err := fs.Stat(fsys, p + ".tei"); err != nil {
+	if _, err := fs.Stat(fsys, p+".tei"); err != nil {
 		serve404(w, r)
 		log.Println("serve:", p, "not found.", readUserIP(r))
 		return

@@ -5,7 +5,7 @@ import (
 	"html"
 	"log"
 	"net/http"
-	"path/filepath"
+	"path"
 	"regexp"
 	"strings"
 
@@ -51,7 +51,7 @@ func search(q string) string {
 		}
 
 		name := strings.TrimSuffix(hit.ID, ".tei")
-		link := filepath.Join("/", name)
+		link := path.Join("/", name)
 
 		if metadata, ok := teisai.GetMetadataFromReader(r); ok {
 			if title, ok := metadata["title"]; ok {

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"embed"
 	"flag"
+	"io/fs"
 	"log"
 	"net/http"
-	"io/fs"
-	"embed"
-	"path/filepath"
+	"path"
 	"regexp"
 	"strconv"
 	"strings"
@@ -15,7 +15,6 @@ import (
 
 	"github.com/blevesearch/bleve/v2"
 	"github.com/ftphikari/teisai"
-	"github.com/nanmu42/gzip"
 )
 
 //go:embed site
@@ -27,7 +26,7 @@ const (
 )
 
 var (
-	port  int
+	port int
 	// directory name, displayed name
 	searchIndex = map[string]string{
 		"articles": "Articles",
@@ -76,7 +75,7 @@ func loadDirectory(dir string) {
 
 	for _, f := range p {
 		name := f.Name()
-		fpath := filepath.Join(dir, name)
+		fpath := path.Join(dir, name)
 		if strings.HasPrefix(name, ".") {
 			continue
 		}
@@ -158,7 +157,7 @@ func main() {
 		log.Fatal("Unable to load embed site:", err)
 	}
 
-	http.Handle("/", gzip.DefaultHandler().WrapHandler(http.HandlerFunc(serve)))
+	http.Handle("/", http.HandlerFunc(serve))
 	log.Println("Server started")
 	go reloadCache()
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(port), nil))
