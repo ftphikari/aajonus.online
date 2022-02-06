@@ -83,7 +83,7 @@ func serveSearch(w http.ResponseWriter, r *http.Request) {
 	page := ""
 	if len(q) < 3 {
 		page = "<h1>Query is too short</h1>"
-	} else if len(q) > 33 {
+	} else if len(q) > 128 {
 		page = "<h1>Query is too long</h1>"
 	} else {
 		page = search(q)
